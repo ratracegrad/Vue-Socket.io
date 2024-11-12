@@ -3,13 +3,13 @@ import Logger from './logger';
 export default class EventEmitter {
 
     constructor(pinia = {}) {
-			console.log('start constructor', pinia)
+		Logger.info('start constructor', pinia)
         Logger.info(pinia ? `Pinia adapter enabled` : `Pinia adapter disabled`);
         Logger.info(pinia.mutationPrefix ? `Pinia socket mutations enabled` : `Pinia socket mutations disabled`);
-				console.log('mutationPrefix', pinia.mutationPrefix)
+		Logger.info('mutationPrefix', pinia.mutationPrefix)
         Logger.info(pinia ? `Pinia socket actions enabled` : `Pinia socket actions disabled`);
         this.store = pinia.store;
-				console.log('store', this.store)
+		Logger.info('store', this.store)
         this.actionPrefix = pinia.actionPrefix ? pinia.actionPrefix : 'SOCKET_';
         this.mutationPrefix = pinia.mutationPrefix;
         this.listeners = new Map();
@@ -38,6 +38,7 @@ export default class EventEmitter {
      * @param args
      */
     emit(event, ...args) {
+        Logger.info('in emit', event, ...args)
         if (this.listeners.has(event)) {
             this.listeners.get(event).forEach(listener => {
                 listener.callback.apply(listener.component, args);
@@ -45,6 +46,7 @@ export default class EventEmitter {
         }
 
         if (this.store) {
+            Logger.info('in emit and have store', this.mutationPrefix, this.actionPrefix)
             if (this.mutationPrefix) {
                 const mutation = `${this.mutationPrefix}${event}`;
                 if (this.store.hasMutation(mutation)) {

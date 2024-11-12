@@ -4,7 +4,7 @@
 export default new class VueSocketIOLogger {
 
     constructor() {
-        this.debug = false;
+        this.debug = true;
         this.prefix = '%cVue-Socket.io: ';
     }
 
